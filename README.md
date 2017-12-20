@@ -1,4 +1,0 @@
-# maya
-# maya
-# simplemooc
-# maya
