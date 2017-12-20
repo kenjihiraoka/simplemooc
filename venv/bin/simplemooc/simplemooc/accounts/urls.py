@@ -20,5 +20,4 @@ urlpatterns = [
 	url(r'^editar/$', accountView.edit, name='edit'),
 
 	url(r'^editar_senha/$', accountView.edit_password, name='edit_password'),
-
-]
+]	

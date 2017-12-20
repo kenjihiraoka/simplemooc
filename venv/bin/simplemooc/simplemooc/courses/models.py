@@ -1,4 +1,5 @@
 from django.db import models
+from django.conf import settings
 
 # Create your models here.
 
@@ -35,3 +36,39 @@ class Course(models.Model):
 		verbose_name = 'Curso'
 		verbose_name_plural = 'Cursos'	
 		ordering = ['name']
+
+class Enrollment(models.Model):
+	STATUS_CHOICES = (
+			(0, 'Pendente'),
+			(1, 'Aprovado'),
+			(2, 'Cancelado'),
+		)
+
+	user = models.ForeignKey(
+			settings.AUTH_USER_MODEL, verbose_name='Usuário',
+			related_name='enrollments'
+		)	
+	course = models.ForeignKey(
+			Course, verbose_name='Curso', 
+			related_name='enrollments'
+		)
+	status = models.IntegerField(
+			'Situação', choices=STATUS_CHOICES, default=0,
+			blank=True
+		)
+
+	#sempre é importante colocar esse tipo de variavel
+	created_at = models.DateTimeField('Criado em', auto_now_add=True)
+	updated_at = models.DateTimeField('Atualizado em', auto_now=True)
+
+	def active(self):
+		self.status = 1
+		self.save()
+
+	class Meta:
+		verbose_name='Inscrição'
+		verbose_name_plural='Incrições'
+		#unique_together permite que o usuário se cadastre apenas uma vez
+		#em um curso enquanto ele já estiver inscrito nele, ou seja,
+		#é uma relação de 1:1
+		unique_together=(('user', 'course'))

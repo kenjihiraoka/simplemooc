@@ -2,6 +2,8 @@ from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import get_user_model 
 from simplemooc.core.utils import generate_hash_key 
+from simplemooc.core.mail import send_mail_template
+from .models import PasswordReset
 
 User = get_user_model()
 
@@ -23,7 +25,6 @@ class PasswordResetForm(forms.Form):
 		subject = 'Criar nova senha no Simple MOOC'
 		context = {'reset': reset}
 		send_mail_template(subject, template_name, context, [user.email])
-			
 
 class RegisterForm(forms.ModelForm):
 	email = forms.EmailField(label='E-mail')	

@@ -6,13 +6,16 @@ from django.conf import settings
 from .forms import RegisterForm, EditAccountForm, PasswordResetForm
 from .models import PasswordReset
 #from simplemooc.accounts.models import PasswordReset
+from django.contrib import messages
+from simplemooc.courses.models import Enrollment
 
 User = get_user_model()
 
 @login_required
 def dashboard(request):
 	template_name = 'accounts/dashboard.html'
-	return render(request, template_name)
+	context = {}
+	return render(request, template_name, context)
 
 def register(request):
 	template_name = 'accounts/register.html'
@@ -62,8 +65,8 @@ def edit(request):
 		form = EditAccountForm(request.POST, instance = request.user)
 		if form.is_valid():
 			form.save()
-			form = EditAccountForm(instance=request.user)
-			context['success'] = True
+			messages.success(request, 'Os dados da sua conta foram alterados com sucesso')
+			return redirect('accounts:dashboard', )
 	else:
 		form = EditAccountForm()
 
